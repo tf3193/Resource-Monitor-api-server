@@ -1,11 +1,12 @@
 from flask import Flask
 import random
 import datetime
-import kafkaConsumer
 import time
 from flask_cors import CORS
 import multiprocessing
+import consumer
 
+consumer = consumer.Consumer()
 
 app = Flask(__name__)
 CORS(app)
@@ -14,14 +15,14 @@ CORS(app)
 @app.route('/api/memory')
 def memory():
     d = {}
-    value = kafkaConsumer.get_memory_metrics()
+    value = consumer.get_memory_metrics()
     d['value'] = value['utilization']
     return d
 
 @app.route('/api/cpu')
 def cpu():
     d = {}
-    value = kafkaConsumer.get_cpu_metrics()
+    value = consumer.get_cpu_metrics()
     d['value'] = value['utilization']
     return d
 
@@ -34,7 +35,12 @@ def core_count():
 
 @app.route('/api/core')
 def core():
-    value = kafkaConsumer.get_cpu_core_metrics()
+    value = consumer.get_cpu_core_metrics()
+    return value
+
+@app.route('/api/processes')
+def process():
+    value = consumer.get_process_metrics()
     return value
 
 @app.route('/api/gpu')

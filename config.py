@@ -1,0 +1,1 @@
+MIN_MEMORY = 5000
