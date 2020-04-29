@@ -1,7 +1,4 @@
 from flask import Flask
-import random
-import datetime
-import time
 from flask_cors import CORS
 import multiprocessing
 import consumer
@@ -14,24 +11,18 @@ CORS(app)
 
 @app.route('/api/memory')
 def memory():
-    d = {}
     value = consumer.get_memory_metrics()
-    d['value'] = value['utilization']
-    return d
+    return {'value': value}
 
 @app.route('/api/cpu')
 def cpu():
-    d = {}
     value = consumer.get_cpu_metrics()
-    d['value'] = value['utilization']
-    return d
+    return {'value': value}
 
 @app.route('/api/total_core')
 def core_count():
-    d = {}
     num_cores = multiprocessing.cpu_count()
-    d['value'] = num_cores
-    return d
+    return {'value': num_cores}
 
 @app.route('/api/core')
 def core():
@@ -42,16 +33,6 @@ def core():
 def process():
     value = consumer.get_process_metrics()
     return value
-
-@app.route('/api/gpu')
-def gpu():
-    d = {}
-    ts = time.time()
-    value = random.randint(1, 101)
-    d[ts] = value
-    return d
-
-
 
 
 if __name__ == '__main__':
