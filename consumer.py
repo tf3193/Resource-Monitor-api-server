@@ -23,8 +23,10 @@ class Consumer:
         poll_results = self.consumer.poll(timeout_ms=5000)
         # I need the list of keys because poll results unlike messages inside of consumer, is a dictionary not a list.
         keys = list(poll_results)
+        if len(keys) == 0:
+            return
         for message in poll_results[keys[0]]:
-            #Convert the message from bytes to utf
+            # Convert the message from bytes to utf
             dict_str = message.value.decode("UTF-8")
             mydata = ast.literal_eval(dict_str)
             metric_type = mydata['metric_type']
@@ -35,8 +37,8 @@ class Consumer:
             elif metric_type == 'cpu':
                 self.metrics['cpu'].append(mydata['utilization'])
             elif metric_type == 'processes':
-                #Check the configured memory value in config.py, as long as we are using more we will keep track of this
-                #process
+                # Check the configured memory value in config.py, as long as we are using more we will keep track of
+                # this process
                 if config.MIN_MEMORY <= mydata['memory']:
                     self.metrics['processes'][mydata['pid']] = {'memory': mydata['memory'], 'state': mydata['state'],
                                             'name': mydata['name']}
