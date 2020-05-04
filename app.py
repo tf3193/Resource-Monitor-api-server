@@ -34,6 +34,10 @@ def process():
     value = consumer.get_process_metrics()
     return value
 
+@app.route('/api/network')
+def network():
+    value = consumer.get_network_metrics()
+    return value
 
 if __name__ == '__main__':
     app.run()
