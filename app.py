@@ -6,7 +6,7 @@ import consumer
 consumer = consumer.Consumer()
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, supports_credentials=True)
 
 
 @app.route('/api/memory')
