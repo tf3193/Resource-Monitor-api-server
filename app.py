@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, send_from_directory
 from flask_cors import CORS
 import multiprocessing
 import consumer
@@ -38,6 +38,11 @@ def process():
 def network():
     value = consumer.get_network_metrics()
     return value
+
+@app.route('/', defaults={'p': "index.html"})
+@app.route('/<path:p>')
+def index(p):
+    return send_from_directory('web', p)
 
 if __name__ == '__main__':
     app.run()
